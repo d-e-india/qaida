@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Madni Qaida Tracking</title>
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --secondary-color: #166088;
+            --accent-color: #4fc3f7;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --success-color: #28a745;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            text-align: center;
+            color: var(--secondary-color);
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--secondary-color);
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--secondary-color);
+        }
+        
+        .success-message {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #d4edda;
+            color: var(--success-color);
+            border-radius: 6px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .logo i {
+            font-size: 50px;
+            color: var(--primary-color);
+        }
+        
+        @media (max-width: 576px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+            </svg>
+        </div>
+        <h1>Madni Qaida Tracking</h1>
+        <form id="trackingForm">
+            <div class="form-group">
+                <label for="name">Your Name</label>
+                <input type="text" id="name" name="name" required placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="count">How many times did you read today?</label>
+                <select id="count" name="count" required>
+                    <option value="" disabled selected>Select count</option>
+                    <option value="1">1 time</option>
+                    <option value="2">2 times</option>
+                    <option value="3">3 times</option>
+                    <option value="4">4 times</option>
+                    <option value="5">5 times</option>
+                    <option value="6">6 times</option>
+                    <option value="7">7 times</option>
+                    <option value="8">8 times</option>
+                    <option value="9">9 times</option>
+                    <option value="10">10 times</option>
+                    <option value="11">11 times</option>
+                    <option value="12">12 times</option>
+                </select>
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <div id="successMessage" class="success-message">
+            Thank you! Your submission has been recorded.
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('trackingForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const form = e.target;
+            const formData = new FormData(form);
+            const data = {};
+            
+            formData.forEach((value, key) => {
+                data[key] = value;
+            });
+            
+            fetch('YOUR_APPS_SCRIPT_WEB_APP_URL', {
+                method: 'POST',
+                mode: 'no-cors',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data)
+            })
+            .then(() => {
+                form.reset();
+                document.getElementById('successMessage').style.display = 'block';
+                setTimeout(() => {
+                    document.getElementById('successMessage').style.display = 'none';
+                }, 3000);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your data. Please try again.');
+            });
+        });
+    </script>
+</body>
+</html>
