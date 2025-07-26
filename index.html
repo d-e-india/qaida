@@ -172,17 +172,14 @@
         const successMsg = document.getElementById('successMessage');
         const errorMsg = document.getElementById('errorMessage');
         
-        // Your Google Apps Script deployment URL
+        // NEW APPS SCRIPT DEPLOYMENT URL
         const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyUYi5pgyzn1-L24rnqIhtq8xEvMjDPx6rV6MLu1yZHMUbus3Juyw-G721duCeMlMI/exec';
         
         form.addEventListener('submit', async function(e) {
             e.preventDefault();
             
-            // Disable button during submission
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-            
-            // Hide previous messages
             successMsg.style.display = 'none';
             errorMsg.style.display = 'none';
             
@@ -191,48 +188,58 @@
                     name: document.getElementById('name').value.trim(),
                     count: document.getElementById('count').value
                 };
-                
-                // Validate count
-                if (formData.count < 1 || formData.count > 12) {
-                    throw new Error('Please select a count between 1 and 12');
+
+                // Enhanced validation
+                if (!formData.name) throw new Error('Please enter your name');
+                if (!formData.count || formData.count < 1 || formData.count > 12) {
+                    throw new Error('Please select a valid count (1-12)');
                 }
+
+                // Added timeout and error handling
+                const controller = new AbortController();
+                const timeoutId = setTimeout(() => controller.abort(), 10000);
                 
                 const response = await fetch(SCRIPT_URL, {
                     method: 'POST',
-                    headers: {
+                    headers: { 
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(formData)
-                });
-                
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                
+                    body: JSON.stringify(formData),
+                    signal: controller.signal
+                }).finally(() => clearTimeout(timeoutId));
+
                 const result = await response.json();
                 
-                if (result.status !== 'success') {
+                if (!response.ok || result.status !== 'success') {
                     throw new Error(result.message || 'Submission failed');
                 }
-                
-                // Show success message
+
                 successMsg.style.display = 'block';
                 form.reset();
                 
             } catch (error) {
                 console.error('Error:', error);
-                errorMsg.textContent = error.message || 'There was an error submitting your data. Please try again.';
+                errorMsg.textContent = error.message.includes('Failed to fetch') 
+                    ? 'Network error: Could not connect to server. Please check your internet connection and try again.'
+                    : error.message;
                 errorMsg.style.display = 'block';
             } finally {
-                // Reset button state
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit';
-                
-                // Hide messages after 5 seconds
                 setTimeout(() => {
                     successMsg.style.display = 'none';
                     errorMsg.style.display = 'none';
                 }, 5000);
+            }
+        });
+
+        // Test server connection on page load
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                await fetch(SCRIPT_URL, { method: 'HEAD', mode: 'no-cors' });
+                console.log('Server connection test successful');
+            } catch (error) {
+                console.warn('Server connection test failed:', error);
             }
         });
     </script>
