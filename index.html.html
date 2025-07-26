@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌙 Sabak Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Naskh+Arabic:wght@400;700&family=Poppins:wght@300;400;600;700&display=swap');
+    
+    :root {
+      --islamic-green: #0a5c36;
+      --gold: #d4af37;
+      --white: #fff;
+      --light-gray: #f8f8f8;
+      --dark-gray: #333;
+      --telegram-blue: #0088cc;
+      --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+    
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    body {
+      font-family: 'Poppins', 'Noto Naskh Arabic', sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    .tracker-card {
+      background-color: var(--white);
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      padding: 40px;
+      width: 100%;
+      max-width: 480px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+      transform: translateY(0);
+      opacity: 1;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(10px);
+    }
+    
+    .tracker-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: linear-gradient(90deg, var(--islamic-green), var(--gold));
+      animation: rainbow 8s linear infinite;
+      background-size: 400% 400%;
+    }
+    
+    @keyframes rainbow {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    
+    .tracker-card.hide {
+      transform: translateY(-20px);
+      opacity: 0;
+    }
+    
+    .header {
+      margin-bottom: 30px;
+      animation: fadeInDown 0.8s;
+    }
+    
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .header .icon {
+      font-size: 64px;
+      color: var(--islamic-green);
+      margin-bottom: 15px;
+      text-shadow: 0 4px 10px rgba(10, 92, 54, 0.2);
+      animation: pulse 2s infinite alternate;
+    }
+    
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
+    }
+    
+    .header h1 {
+      color: var(--islamic-green);
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .form-group {
+      margin-bottom: 25px;
+      text-align: left;
+      animation: fadeInUp 0.8s;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    label {
+      display: block;
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: var(--dark-gray);
+      font-weight: 600;
+      padding-left: 5px;
+      animation: labelEntrance 0.6s;
+    }
+    
+    @keyframes labelEntrance {
+      from {
+        opacity: 0;
+        transform: translateX(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+    
+    .input-container {
+      position: relative;
+      margin-bottom: 5px;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 16px 20px;
+      font-size: 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      background-color: rgba(255, 255, 255, 0.8);
+      color: var(--dark-gray);
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    input:focus, select:focus {
+      outline: none;
+      border-color: var(--islamic-green);
+      box-shadow: 0 0 0 4px rgba(10, 92, 54, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    input::placeholder {
+      color: #aaa;
+      transition: all 0.3s;
+    }
+    
+    input:focus::placeholder {
+      opacity: 0.5;
+      transform: translateX(5px);
+    }
+    
+    .name-field {
+      position: relative;
+    }
+    
+    .name-field::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--islamic-green), var(--gold));
+      transition: width 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .name-field:focus-within::after {
+      width: 100%;
+    }
+    
+    .submit-btn {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--islamic-green), #0a8c36);
+      color: var(--white);
+      font-size: 17px;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      margin-top: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(10, 92, 54, 0.3);
+      z-index: 1;
+    }
+    
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0a8c36, var(--islamic-green));
+      opacity: 0;
+      transition: opacity 0.4s;
+      z-index: -1;
+    }
+    
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(10, 92, 54, 0.4);
+    }
+    
+    .submit-btn:hover::before {
+      opacity: 1;
+    }
+    
+    .submit-btn:active {
+      transform: translateY(1px);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    .submit-btn .submit-text {
+      transition: all 0.5s;
+    }
+    
+    .submit-btn .telegram-plane {
+      position: absolute;
+      font-size: 24px;
+      color: var(--white);
+      right: 20px;
+      opacity: 0.9;
+      transition: all 0.5s;
+      transform: scale(1);
+    }
+    
+    .submit-btn.sent .submit-text {
+      transform: translateX(-30px);
+      opacity: 0;
+    }
+    
+    .submit-btn.sent .telegram-plane {
+      animation: telegramFly 1.2s cubic-bezier(0.55, 0.085, 0.68, 0.53) forwards;
+    }
+    
+    @keyframes telegramFly {
+      0% {
+        transform: scale(1) translate(0, 0);
+        opacity: 0.9;
+      }
+      20% {
+        transform: scale(1.8) translate(0, -15px);
+        opacity: 1;
+      }
+      40% {
+        transform: scale(2.5) translate(0, -40px);
+        opacity: 0.8;
+      }
+      60% {
+        transform: scale(3.2) translate(0, -80px);
+        opacity: 0.6;
+      }
+      80% {
+        transform: scale(4) translate(0, -130px);
+        opacity: 0.3;
+      }
+      100% {
+        transform: scale(5) translate(0, -200px);
+        opacity: 0;
+      }
+    }
+    
+    /* Success Page */
+    .success-page {
+      display: none;
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 450px;
+      animation: successEntrance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+    
+    @keyframes successEntrance {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -40%);
+      }
+      to {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+    
+    .success-icon {
+      font-size: 100px;
+      color: var(--islamic-green);
+      margin-bottom: 25px;
+      animation: bounceIn 0.8s, float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+    
+    .success-message {
+      font-size: 26px;
+      color: var(--islamic-green);
+      margin-bottom: 15px;
+      font-weight: 700;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .islamic-message {
+      font-size: 20px;
+      color: var(--dark-gray);
+      margin-bottom: 15px;
+      font-style: italic;
+      font-family: 'Noto Naskh Arabic', serif;
+      animation: fadeIn 1.5s;
+    }
+    
+    .recipient {
+      font-size: 18px;
+      color: var(--dark-gray);
+      margin-bottom: 35px;
+      animation: fadeIn 1.5s;
+    }
+    
+    .recipient strong {
+      color: var(--islamic-green);
+      font-weight: 700;
+    }
+    
+    .back-btn {
+      padding: 15px 30px;
+      background: linear-gradient(135deg, var(--islamic-green), #0a8c36);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      box-shadow: 0 5px 15px rgba(10, 92, 54, 0.3);
+      animation: fadeInUp 1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(10, 92, 54, 0.4);
+    }
+    
+    .back-btn:active {
+      transform: translateY(1px);
+    }
+    
+    /* Modal Styles */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+      animation: fadeIn 0.3s;
+      backdrop-filter: blur(5px);
+    }
+    
+    .modal-content {
+      background-color: var(--white);
+      padding: 30px;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      text-align: center;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+      transform: scale(1);
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      animation: modalEntrance 0.4s;
+    }
+    
+    @keyframes modalEntrance {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+    
+    .modal-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      margin-top: 25px;
+    }
+    
+    .modal-btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      font-size: 15px;
+    }
+    
+    .cancel-btn {
+      background-color: #f1f1f1;
+      color: #333;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    }
+    
+    .confirm-btn {
+      background: linear-gradient(135deg, var(--islamic-green), #0a8c36);
+      color: white;
+      box-shadow: 0 3px 10px rgba(10, 92, 54, 0.3);
+    }
+    
+    .modal-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    
+    .footer {
+      margin-top: 30px;
+      color: #777;
+      font-size: 14px;
+      animation: fadeIn 1s;
+    }
+    
+    /* Floating particles */
+    .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: -1;
+      overflow: hidden;
+    }
+    
+    .particle {
+      position: absolute;
+      background: rgba(10, 92, 54, 0.15);
+      border-radius: 50%;
+      animation: floatParticle linear infinite;
+    }
+    
+    @keyframes floatParticle {
+      0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="tracker-card" id="mainForm">
+    <div class="header">
+      <div class="icon"><i class="fas fa-book-quran"></i></div>
+      <h1>आपने आज कितनी बार सबक पढ़ा?</h1>
+    </div>
+    
+    <form id="sabakForm">
+      <div class="form-group">
+        <label for="name">Your Name:</label>
+        <div class="input-container name-field">
+          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="count">Select Count (1-12):</label>
+        <select id="count" name="count" required>
+          <option value="">-- Select --</option>
+          <option value="1">1 time</option>
+          <option value="2">2 times</option>
+          <option value="3">3 times</option>
+          <option value="4">4 times</option>
+          <option value="5">5 times</option>
+          <option value="6">6 times</option>
+          <option value="7">7 times</option>
+          <option value="8">8 times</option>
+          <option value="9">9 times</option>
+          <option value="10">10 times</option>
+          <option value="11">11 times</option>
+          <option value="12">12 times</option>
+        </select>
+      </div>
+      
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="submit-text">Submit Report</span>
+        <i class="fab fa-telegram-plane telegram-plane"></i>
+      </button>
+    </form>
+    
+    <div class="footer">
+      Sabak Tracker © 2023 | Quran Progress System
+    </div>
+  </div>
+
+  <!-- Success Page -->
+  <div class="success-page" id="successPage">
+    <div class="success-icon">
+      <i class="fas fa-check-circle"></i>
+    </div>
+    <div class="success-message">
+      Report Submitted Successfully!
+    </div>
+    <div class="islamic-message">
+      جزاك الله خيرًا
+    </div>
+    <div class="recipient">
+      Your report has been sent to<br>
+      <strong>AFZAL ATTARI</strong>
+    </div>
+    <button class="back-btn" id="backBtn">
+      <i class="fas fa-home"></i> Back to Home
+    </button>
+  </div>
+
+  <!-- Resubmission Modal -->
+  <div class="modal" id="resubmitModal">
+    <div class="modal-content">
+      <h3 style="color: var(--islamic-green); margin-bottom: 15px;">
+        <i class="fas fa-exclamation-circle"></i> Already Submitted
+      </h3>
+      <p>You've already submitted today. Do you want to submit again?</p>
+      <div class="modal-buttons">
+        <button class="modal-btn cancel-btn" id="cancelBtn">Cancel</button>
+        <button class="modal-btn confirm-btn" id="confirmBtn">Submit Again</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Create floating particles
+      const particlesContainer = document.getElementById('particles');
+      for (let i = 0; i < 20; i++) {
+        const particle = document.createElement('div');
+        particle.classList.add('particle');
+        
+        // Random properties
+        const size = Math.random() * 10 + 5;
+        const posX = Math.random() * 100;
+        const posY = Math.random() * 100;
+        const duration = Math.random() * 20 + 10;
+        const delay = Math.random() * 5;
+        
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.left = `${posX}%`;
+        particle.style.top = `${posY}%`;
+        particle.style.animationDuration = `${duration}s`;
+        particle.style.animationDelay = `${delay}s`;
+        
+        particlesContainer.appendChild(particle);
+      }
+      
+      const form = document.getElementById('sabakForm');
+      const submitBtn = document.getElementById('submitBtn');
+      const resubmitModal = document.getElementById('resubmitModal');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const confirmBtn = document.getElementById('confirmBtn');
+      const mainForm = document.getElementById('mainForm');
+      const successPage = document.getElementById('successPage');
+      const backBtn = document.getElementById('backBtn');
+      const telegramToken = "8358716374:AAHshXli42MOAxNUXWoY8u-KQu8NAw6h38g";
+      const chatId = "5958336964";
+      
+      let shouldSubmit = false;
+      
+      // Check if already submitted today
+      function checkSubmission() {
+        const lastSubmitted = localStorage.getItem('lastSabakSubmitted');
+        if (lastSubmitted) {
+          const lastDate = new Date(lastSubmitted);
+          const today = new Date();
+          
+          return lastDate.toDateString() === today.toDateString();
+        }
+        return false;
+      }
+      
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('name').value.trim();
+        const count = document.getElementById('count').value;
+        
+        if (!name || !count) {
+          // Shake animation for empty fields
+          if (!name) {
+            const nameField = document.querySelector('.name-field');
+            nameField.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+              nameField.style.animation = '';
+            }, 500);
+          }
+          if (!count) {
+            const countField = document.getElementById('count');
+            countField.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+              countField.style.animation = '';
+            }, 500);
+          }
+          return;
+        }
+        
+        if (checkSubmission() && !shouldSubmit) {
+          // Show resubmission modal
+          resubmitModal.style.display = 'flex';
+          return;
+        }
+        
+        // Start submit animation
+        submitBtn.disabled = true;
+        submitBtn.classList.add('sent');
+        
+        // Submit form after animation
+        setTimeout(() => {
+          submitForm(name, count);
+        }, 1000);
+      });
+      
+      // Handle modal buttons
+      cancelBtn.addEventListener('click', function() {
+        resubmitModal.style.display = 'none';
+      });
+      
+      confirmBtn.addEventListener('click', function() {
+        shouldSubmit = true;
+        resubmitModal.style.display = 'none';
+        form.dispatchEvent(new Event('submit'));
+      });
+      
+      // Back button handler
+      backBtn.addEventListener('click', function() {
+        // Reset animations
+        successPage.style.display = 'none';
+        mainForm.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.classList.remove('sent');
+        form.reset();
+        
+        // Reset form position with animation
+        setTimeout(() => {
+          mainForm.classList.remove('hide');
+        }, 50);
+      });
+      
+      // Function to handle form submission
+      function submitForm(name, count) {
+        const now = new Date();
+        const message = `📖 *Sabak Report*:\n\n👤 Name: ${name}\n📖 Times Read: ${count}\n⏰ Time: ${now.toLocaleString()}`;
+        
+        // Send to Telegram
+        fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            chat_id: chatId, 
+            text: message,
+            parse_mode: "Markdown"
+          })
+        })
+        .then(response => {
+          if (response.ok) {
+            // Store submission time
+            localStorage.setItem('lastSabakSubmitted', now.toString());
+            
+            // Add to daily submissions
+            const dailySubmissions = JSON.parse(localStorage.getItem('dailySubmissions')) || [];
+            dailySubmissions.push({
+              name: name,
+              count: parseInt(count),
+              date: now.toString()
+            });
+            localStorage.setItem('dailySubmissions', JSON.stringify(dailySubmissions));
+            
+            // Show success page
+            mainForm.classList.add('hide');
+            setTimeout(() => {
+              mainForm.style.display = 'none';
+              successPage.style.display = 'block';
+            }, 500);
+            
+            // Prepare and send daily summary
+            sendDailySummary(now);
+          } else {
+            throw new Error('Network response was not ok');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert("Something went wrong. Please try again.");
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('sent');
+        });
+      }
+      
+      // Function to send daily summary
+      function sendDailySummary(currentDate) {
+        const dailySubmissions = JSON.parse(localStorage.getItem('dailySubmissions')) || [];
+        
+        // Filter today's valid submissions
+        const todaySubmissions = dailySubmissions.filter(sub => {
+          const isValidDate = new Date(sub.date).toDateString() === currentDate.toDateString();
+          const isValidName = sub.name && sub.name.trim() !== '';
+          const isValidCount = !isNaN(parseInt(sub.count));
+          return isValidDate && isValidName && isValidCount;
+        });
+
+        // Calculate total count properly
+        const totalCount = todaySubmissions.reduce((sum, sub) => {
+          return sum + (parseInt(sub.count) || 0);
+        }, 0);
+
+        if (todaySubmissions.length > 0) {
+          const summaryMessage = `📊 *Daily Summary*:\n\n📅 Date: ${currentDate.toDateString()}\n👥 Total Submissions: ${todaySubmissions.length}\n📚 Total Readings: ${totalCount}\n\n${todaySubmissions.map((sub, i) => `${i+1}. ${sub.name}: ${sub.count} times`).join('\n')}`;
+          
+          fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              chat_id: chatId, 
+              text: summaryMessage,
+              parse_mode: "Markdown"
+            })
+          });
+        }
+      }
+    });
+  </script>
+</body>
+</html>
