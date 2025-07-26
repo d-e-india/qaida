@@ -14,17 +14,10 @@
             --success: #28a745;
         }
         
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
         body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #f5f7fa;
-            color: var(--dark);
-            line-height: 1.6;
+            margin: 0;
             padding: 20px;
         }
         
@@ -38,8 +31,8 @@
         }
         
         h1 {
-            text-align: center;
             color: var(--secondary);
+            text-align: center;
             margin-bottom: 25px;
         }
         
@@ -60,13 +53,6 @@
             border: 1px solid #ddd;
             border-radius: 6px;
             font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        input:focus, select:focus {
-            border-color: var(--accent);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(79, 195, 247, 0.2);
         }
         
         button {
@@ -77,7 +63,6 @@
             border: none;
             border-radius: 6px;
             font-size: 16px;
-            font-weight: 500;
             cursor: pointer;
             transition: background-color 0.3s;
         }
@@ -88,11 +73,10 @@
         
         .message {
             display: none;
-            margin-top: 20px;
             padding: 15px;
+            margin-top: 20px;
             border-radius: 6px;
             text-align: center;
-            font-weight: 500;
         }
         
         .success {
@@ -104,27 +88,10 @@
             background-color: #f8d7da;
             color: #dc3545;
         }
-        
-        .logo {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        
-        .logo svg {
-            width: 64px;
-            height: 64px;
-            color: var(--primary);
-        }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-            </svg>
-        </div>
         <h1>Madni Qaida Tracking</h1>
         <form id="trackingForm">
             <div class="form-group">
@@ -162,51 +129,56 @@
     <script>
         const form = document.getElementById('trackingForm');
         const submitBtn = document.getElementById('submitBtn');
-        const successMsg = document.getElementById('successMessage');
-        const errorMsg = document.getElementById('errorMessage');
         
-        form.addEventListener('submit', async function(e) {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
             
-            // Disable button during submission
+            // Show loading state
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
             
             // Hide previous messages
-            successMsg.style.display = 'none';
-            errorMsg.style.display = 'none';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
             
             try {
                 const formData = new FormData(form);
-                const data = {
-                    name: formData.get('name'),
-                    count: formData.get('count')
-                };
-                
-                const response = await fetch('https://script.google.com/macros/s/AKfycbyNuTA2EybOBCt9lhEAWHzkljFt_n0Ic8hPE-h2vvR3KmhRrS5h_myNbG5Fee5cS3E3/exec', {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbwYr8LmyqmWnISyDTls2fk7ovPNeH4oL9lW8jii-5hrMTu14DQyrZi6QzuVRW4dI9xK/exec', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(data)
+                    body: JSON.stringify({
+                        name: formData.get('name'),
+                        count: formData.get('count')
+                    })
                 });
+
+                const result = await response.json();
+                console.log('Server response:', result);
                 
-                if (!response.ok) throw new Error('Network response was not ok');
+                if (result.status !== 'success') {
+                    throw new Error(result.message || 'Submission failed');
+                }
                 
+                // Show success
+                document.getElementById('successMessage').style.display = 'block';
                 form.reset();
-                successMsg.style.display = 'block';
                 
             } catch (error) {
                 console.error('Error:', error);
-                errorMsg.style.display = 'block';
+                document.getElementById('errorMessage').textContent = 
+                    `Error: ${error.message || 'Could not connect to server'}`;
+                document.getElementById('errorMessage').style.display = 'block';
             } finally {
+                // Reset button
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit';
                 
                 // Hide messages after 5 seconds
                 setTimeout(() => {
-                    successMsg.style.display = 'none';
-                    errorMsg.style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'none';
+                    document.getElementById('errorMessage').style.display = 'none';
                 }, 5000);
             }
         });
