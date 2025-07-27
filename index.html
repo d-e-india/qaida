@@ -50,7 +50,6 @@
       transform: translateY(0);
       opacity: 1;
       border: 1px solid rgba(255, 255, 255, 0.3);
-      backdrop-filter: blur(10px);
     }
     
     .tracker-card::before {
@@ -71,25 +70,9 @@
       100% { background-position: 0% 50%; }
     }
     
-    .tracker-card.hide {
-      transform: translateY(-20px);
-      opacity: 0;
-    }
-    
     .header {
       margin-bottom: 30px;
       animation: fadeInDown 0.8s;
-    }
-    
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-30px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
     
     .header .icon {
@@ -100,34 +83,17 @@
       animation: pulse 2s infinite alternate;
     }
     
-    @keyframes pulse {
-      from { transform: scale(1); }
-      to { transform: scale(1.1); }
-    }
-    
     .header h1 {
       color: var(--islamic-green);
       font-size: 28px;
       font-weight: 700;
       margin-bottom: 10px;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .form-group {
       margin-bottom: 25px;
       text-align: left;
       animation: fadeInUp 0.8s;
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
     }
     
     label {
@@ -137,23 +103,10 @@
       color: var(--dark-gray);
       font-weight: 600;
       padding-left: 5px;
-      animation: labelEntrance 0.6s;
-    }
-    
-    @keyframes labelEntrance {
-      from {
-        opacity: 0;
-        transform: translateX(-10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
     }
     
     .input-container {
       position: relative;
-      margin-bottom: 5px;
     }
     
     input, select {
@@ -164,7 +117,7 @@
       border-radius: 12px;
       background-color: rgba(255, 255, 255, 0.8);
       color: var(--dark-gray);
-      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.4s;
       box-shadow: 0 2px 10px rgba(0,0,0,0.05);
     }
     
@@ -172,36 +125,6 @@
       outline: none;
       border-color: var(--islamic-green);
       box-shadow: 0 0 0 4px rgba(10, 92, 54, 0.15);
-      transform: translateY(-2px);
-    }
-    
-    input::placeholder {
-      color: #aaa;
-      transition: all 0.3s;
-    }
-    
-    input:focus::placeholder {
-      opacity: 0.5;
-      transform: translateX(5px);
-    }
-    
-    .name-field {
-      position: relative;
-    }
-    
-    .name-field::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 0;
-      height: 2px;
-      background: linear-gradient(90deg, var(--islamic-green), var(--gold));
-      transition: width 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-    }
-    
-    .name-field:focus-within::after {
-      width: 100%;
     }
     
     .submit-btn {
@@ -214,52 +137,14 @@
       border: none;
       border-radius: 12px;
       cursor: pointer;
-      transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      transition: all 0.4s;
       margin-top: 15px;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
       position: relative;
       overflow: hidden;
       box-shadow: 0 5px 15px rgba(10, 92, 54, 0.3);
-      z-index: 1;
-    }
-    
-    .submit-btn::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(135deg, #0a8c36, var(--islamic-green));
-      opacity: 0;
-      transition: opacity 0.4s;
-      z-index: -1;
-    }
-    
-    .submit-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(10, 92, 54, 0.4);
-    }
-    
-    .submit-btn:hover::before {
-      opacity: 1;
-    }
-    
-    .submit-btn:active {
-      transform: translateY(1px);
-    }
-    
-    .submit-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none !important;
-    }
-    
-    .submit-btn .submit-text {
-      transition: all 0.5s;
     }
     
     .submit-btn .telegram-plane {
@@ -269,12 +154,6 @@
       right: 20px;
       opacity: 0.9;
       transition: all 0.5s;
-      transform: scale(1);
-    }
-    
-    .submit-btn.sent .submit-text {
-      transform: translateX(-30px);
-      opacity: 0;
     }
     
     .submit-btn.sent .telegram-plane {
@@ -282,30 +161,9 @@
     }
     
     @keyframes telegramFly {
-      0% {
-        transform: scale(1) translate(0, 0);
-        opacity: 0.9;
-      }
-      20% {
-        transform: scale(1.8) translate(0, -15px);
-        opacity: 1;
-      }
-      40% {
-        transform: scale(2.5) translate(0, -40px);
-        opacity: 0.8;
-      }
-      60% {
-        transform: scale(3.2) translate(0, -80px);
-        opacity: 0.6;
-      }
-      80% {
-        transform: scale(4) translate(0, -130px);
-        opacity: 0.3;
-      }
-      100% {
-        transform: scale(5) translate(0, -200px);
-        opacity: 0;
-      }
+      0% { transform: scale(1) translate(0, 0); opacity: 0.9; }
+      20% { transform: scale(1.8) translate(0, -15px); opacity: 1; }
+      100% { transform: scale(5) translate(0, -200px); opacity: 0; }
     }
     
     /* Success Page */
@@ -318,30 +176,14 @@
       transform: translate(-50%, -50%);
       width: 90%;
       max-width: 450px;
-      animation: successEntrance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-    }
-    
-    @keyframes successEntrance {
-      from {
-        opacity: 0;
-        transform: translate(-50%, -40%);
-      }
-      to {
-        opacity: 1;
-        transform: translate(-50%, -50%);
-      }
+      animation: fadeIn 0.8s;
     }
     
     .success-icon {
       font-size: 100px;
       color: var(--islamic-green);
       margin-bottom: 25px;
-      animation: bounceIn 0.8s, float 3s ease-in-out infinite;
-    }
-    
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-15px); }
+      animation: bounceIn 0.8s;
     }
     
     .success-message {
@@ -349,28 +191,13 @@
       color: var(--islamic-green);
       margin-bottom: 15px;
       font-weight: 700;
-      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
     
     .islamic-message {
       font-size: 20px;
       color: var(--dark-gray);
       margin-bottom: 15px;
-      font-style: italic;
       font-family: 'Noto Naskh Arabic', serif;
-      animation: fadeIn 1.5s;
-    }
-    
-    .recipient {
-      font-size: 18px;
-      color: var(--dark-gray);
-      margin-bottom: 35px;
-      animation: fadeIn 1.5s;
-    }
-    
-    .recipient strong {
-      color: var(--islamic-green);
-      font-weight: 700;
     }
     
     .back-btn {
@@ -383,20 +210,7 @@
       font-weight: 600;
       cursor: pointer;
       transition: all 0.3s;
-      box-shadow: 0 5px 15px rgba(10, 92, 54, 0.3);
-      animation: fadeInUp 1s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-    }
-    
-    .back-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 8px 20px rgba(10, 92, 54, 0.4);
-    }
-    
-    .back-btn:active {
-      transform: translateY(1px);
+      margin-top: 20px;
     }
     
     /* Modal Styles */
@@ -411,8 +225,6 @@
       z-index: 1000;
       justify-content: center;
       align-items: center;
-      animation: fadeIn 0.3s;
-      backdrop-filter: blur(5px);
     }
     
     .modal-content {
@@ -423,20 +235,7 @@
       max-width: 400px;
       text-align: center;
       box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-      transform: scale(1);
-      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
       animation: modalEntrance 0.4s;
-    }
-    
-    @keyframes modalEntrance {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-      }
     }
     
     .modal-buttons {
@@ -453,67 +252,42 @@
       cursor: pointer;
       font-weight: 600;
       transition: all 0.3s;
-      font-size: 15px;
-    }
-    
-    .cancel-btn {
-      background-color: #f1f1f1;
-      color: #333;
-      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
     
     .confirm-btn {
       background: linear-gradient(135deg, var(--islamic-green), #0a8c36);
       color: white;
-      box-shadow: 0 3px 10px rgba(10, 92, 54, 0.3);
-    }
-    
-    .modal-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     
     .footer {
       margin-top: 30px;
       color: #777;
       font-size: 14px;
-      animation: fadeIn 1s;
     }
     
-    /* Floating particles */
-    .particles {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: -1;
-      overflow: hidden;
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
     
-    .particle {
-      position: absolute;
-      background: rgba(10, 92, 54, 0.15);
-      border-radius: 50%;
-      animation: floatParticle linear infinite;
+    @keyframes bounceIn {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.1); opacity: 1; }
+      100% { transform: scale(1); }
     }
     
-    @keyframes floatParticle {
-      0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(-100vh) rotate(360deg);
-        opacity: 0;
-      }
+    @keyframes modalEntrance {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+    
+    @keyframes pulse {
+      from { transform: scale(1); }
+      to { transform: scale(1.1); }
     }
   </style>
 </head>
 <body>
-  <div class="particles" id="particles"></div>
-  
   <div class="tracker-card" id="mainForm">
     <div class="header">
       <div class="icon"><i class="fas fa-book-quran"></i></div>
@@ -523,8 +297,8 @@
     <form id="sabakForm">
       <div class="form-group">
         <label for="name">Your Name:</label>
-        <div class="input-container name-field">
-          <input type="text" id="name" name="name" placeholder="Enter your full name" required>
+        <div class="input-container">
+          <input type="text" id="name" name="name" placeholder="Enter your name" required>
         </div>
       </div>
       
@@ -548,7 +322,7 @@
       </div>
       
       <button type="submit" class="submit-btn" id="submitBtn">
-        <span class="submit-text">Submit Report</span>
+        Submit Report
         <i class="fab fa-telegram-plane telegram-plane"></i>
       </button>
     </form>
@@ -568,10 +342,6 @@
     </div>
     <div class="islamic-message">
       جزاك الله خيرًا
-    </div>
-    <div class="recipient">
-      Your report has been sent to<br>
-      <strong>AFZAL ATTARI</strong>
     </div>
     <button class="back-btn" id="backBtn">
       <i class="fas fa-home"></i> Back to Home
@@ -594,29 +364,6 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      // Create floating particles
-      const particlesContainer = document.getElementById('particles');
-      for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.classList.add('particle');
-        
-        // Random properties
-        const size = Math.random() * 10 + 5;
-        const posX = Math.random() * 100;
-        const posY = Math.random() * 100;
-        const duration = Math.random() * 20 + 10;
-        const delay = Math.random() * 5;
-        
-        particle.style.width = `${size}px`;
-        particle.style.height = `${size}px`;
-        particle.style.left = `${posX}%`;
-        particle.style.top = `${posY}%`;
-        particle.style.animationDuration = `${duration}s`;
-        particle.style.animationDelay = `${delay}s`;
-        
-        particlesContainer.appendChild(particle);
-      }
-      
       const form = document.getElementById('sabakForm');
       const submitBtn = document.getElementById('submitBtn');
       const resubmitModal = document.getElementById('resubmitModal');
@@ -626,7 +373,7 @@
       const successPage = document.getElementById('successPage');
       const backBtn = document.getElementById('backBtn');
       const telegramToken = "8358716374:AAHshXli42MOAxNUXWoY8u-KQu8NAw6h38g";
-      const chatId = "5958336964";
+      const chatId = "2136341089";
       
       let shouldSubmit = false;
       
@@ -636,7 +383,6 @@
         if (lastSubmitted) {
           const lastDate = new Date(lastSubmitted);
           const today = new Date();
-          
           return lastDate.toDateString() === today.toDateString();
         }
         return false;
@@ -649,72 +395,54 @@
         const count = document.getElementById('count').value;
         
         if (!name || !count) {
-          // Shake animation for empty fields
           if (!name) {
-            const nameField = document.querySelector('.name-field');
-            nameField.style.animation = 'shake 0.5s';
+            document.getElementById('name').style.borderColor = 'red';
             setTimeout(() => {
-              nameField.style.animation = '';
-            }, 500);
+              document.getElementById('name').style.borderColor = '#e0e0e0';
+            }, 1000);
           }
           if (!count) {
-            const countField = document.getElementById('count');
-            countField.style.animation = 'shake 0.5s';
+            document.getElementById('count').style.borderColor = 'red';
             setTimeout(() => {
-              countField.style.animation = '';
-            }, 500);
+              document.getElementById('count').style.borderColor = '#e0e0e0';
+            }, 1000);
           }
           return;
         }
         
         if (checkSubmission() && !shouldSubmit) {
-          // Show resubmission modal
           resubmitModal.style.display = 'flex';
           return;
         }
         
-        // Start submit animation
         submitBtn.disabled = true;
         submitBtn.classList.add('sent');
         
-        // Submit form after animation
         setTimeout(() => {
           submitForm(name, count);
         }, 1000);
       });
       
-      // Handle modal buttons
-      cancelBtn.addEventListener('click', function() {
-        resubmitModal.style.display = 'none';
-      });
-      
-      confirmBtn.addEventListener('click', function() {
-        shouldSubmit = true;
-        resubmitModal.style.display = 'none';
-        form.dispatchEvent(new Event('submit'));
-      });
-      
-      // Back button handler
-      backBtn.addEventListener('click', function() {
-        // Reset animations
-        successPage.style.display = 'none';
-        mainForm.style.display = 'block';
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('sent');
-        form.reset();
-        
-        // Reset form position with animation
-        setTimeout(() => {
-          mainForm.classList.remove('hide');
-        }, 50);
-      });
-      
-      // Function to handle form submission
       function submitForm(name, count) {
         const now = new Date();
-        const message = `📖 *Sabak Report*:\n\n👤 Name: ${name}\n📖 Times Read: ${count}\n⏰ Time: ${now.toLocaleString()}`;
+        const formattedDate = now.toLocaleString('en-US', {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
         
-        // Send to Telegram
+        const message = `📖 *SABAK TRACKER REPORT* 📖\n
+✨ *Name:* ${name}
+📚 *Sabak Count:* ${count} times
+⏰ *Submitted At:* ${formattedDate}
+        
+🕌 *May Allah accept your efforts* 🕌
+        
+اللهم اجعلنا من أهل القرآن الذين هم أهلك وخاصتك`;
+        
         fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -726,27 +454,8 @@
         })
         .then(response => {
           if (response.ok) {
-            // Store submission time
             localStorage.setItem('lastSabakSubmitted', now.toString());
-            
-            // Add to daily submissions
-            const dailySubmissions = JSON.parse(localStorage.getItem('dailySubmissions')) || [];
-            dailySubmissions.push({
-              name: name,
-              count: parseInt(count),
-              date: now.toString()
-            });
-            localStorage.setItem('dailySubmissions', JSON.stringify(dailySubmissions));
-            
-            // Show success page
-            mainForm.classList.add('hide');
-            setTimeout(() => {
-              mainForm.style.display = 'none';
-              successPage.style.display = 'block';
-            }, 500);
-            
-            // Prepare and send daily summary
-            sendDailySummary(now);
+            showSuccessPage();
           } else {
             throw new Error('Network response was not ok');
           }
@@ -759,37 +468,34 @@
         });
       }
       
-      // Function to send daily summary
-      function sendDailySummary(currentDate) {
-        const dailySubmissions = JSON.parse(localStorage.getItem('dailySubmissions')) || [];
-        
-        // Filter today's valid submissions
-        const todaySubmissions = dailySubmissions.filter(sub => {
-          const isValidDate = new Date(sub.date).toDateString() === currentDate.toDateString();
-          const isValidName = sub.name && sub.name.trim() !== '';
-          const isValidCount = !isNaN(parseInt(sub.count));
-          return isValidDate && isValidName && isValidCount;
-        });
-
-        // Calculate total count properly
-        const totalCount = todaySubmissions.reduce((sum, sub) => {
-          return sum + (parseInt(sub.count) || 0);
-        }, 0);
-
-        if (todaySubmissions.length > 0) {
-          const summaryMessage = `📊 *Daily Summary*:\n\n📅 Date: ${currentDate.toDateString()}\n👥 Total Submissions: ${todaySubmissions.length}\n📚 Total Readings: ${totalCount}\n\n${todaySubmissions.map((sub, i) => `${i+1}. ${sub.name}: ${sub.count} times`).join('\n')}`;
-          
-          fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ 
-              chat_id: chatId, 
-              text: summaryMessage,
-              parse_mode: "Markdown"
-            })
-          });
-        }
+      function showSuccessPage() {
+        mainForm.style.opacity = '0';
+        setTimeout(() => {
+          mainForm.style.display = 'none';
+          successPage.style.display = 'block';
+        }, 500);
       }
+      
+      cancelBtn.addEventListener('click', function() {
+        resubmitModal.style.display = 'none';
+      });
+      
+      confirmBtn.addEventListener('click', function() {
+        shouldSubmit = true;
+        resubmitModal.style.display = 'none';
+        form.dispatchEvent(new Event('submit'));
+      });
+      
+      backBtn.addEventListener('click', function() {
+        successPage.style.display = 'none';
+        mainForm.style.display = 'block';
+        setTimeout(() => {
+          mainForm.style.opacity = '1';
+          submitBtn.disabled = false;
+          submitBtn.classList.remove('sent');
+          form.reset();
+        }, 50);
+      });
     });
   </script>
 </body>
