@@ -373,7 +373,7 @@
       const successPage = document.getElementById('successPage');
       const backBtn = document.getElementById('backBtn');
       const telegramToken = "8358716374:AAHshXli42MOAxNUXWoY8u-KQu8NAw6h38g";
-      const chatId = "2136341089";
+      const chatIds = ["5958336964", "2136341089"]; // Both chat IDs
       
       let shouldSubmit = false;
       
@@ -443,29 +443,34 @@
         
 اللهم اجعلنا من أهل القرآن الذين هم أهلك وخاصتك`;
         
-        fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            chat_id: chatId, 
-            text: message,
-            parse_mode: "Markdown"
-          })
-        })
-        .then(response => {
-          if (response.ok) {
-            localStorage.setItem('lastSabakSubmitted', now.toString());
-            showSuccessPage();
-          } else {
-            throw new Error('Network response was not ok');
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          alert("Something went wrong. Please try again.");
-          submitBtn.disabled = false;
-          submitBtn.classList.remove('sent');
+        // Send to both chat IDs
+        const sendPromises = chatIds.map(chatId => {
+          return fetch(`https://api.telegram.org/bot${telegramToken}/sendMessage`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+              chat_id: chatId, 
+              text: message,
+              parse_mode: "Markdown"
+            })
+          });
         });
+
+        Promise.all(sendPromises)
+          .then(responses => {
+            if (responses.every(res => res.ok)) {
+              localStorage.setItem('lastSabakSubmitted', now.toString());
+              showSuccessPage();
+            } else {
+              throw new Error('Some messages failed to send');
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            alert("Something went wrong. Please try again.");
+            submitBtn.disabled = false;
+            submitBtn.classList.remove('sent');
+          });
       }
       
       function showSuccessPage() {
